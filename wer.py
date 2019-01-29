@@ -179,6 +179,8 @@ def alignedPrint(list, r, h, result):
             print (" " * (len(r[index])), end=' ')
     print ()
     print ("WER: " + result)
+    wer_file.writelines (result + "\n")
+
 
 def wer(r, h):
     """
@@ -197,8 +199,14 @@ def wer(r, h):
     alignedPrint(list, r, h, result)
 
 if __name__ == '__main__':
-    filename1 = sys.argv[1]
-    filename2 = sys.argv[2]
-    r = open(filename1).read().split()
-    h = open(filename2).read().split()
-    wer(r, h)
+    filename1 = "hypothesis.txt"
+    filename2 = "reference.txt"
+    with open("WER.txt", "w") as wer_file:
+        with open(filename1, "r", encoding="utf-8") as r:
+            reference = r.readlines()
+
+        with open(filename2, "r", encoding="utf-8") as h:
+            hypothesis = h.readlines()
+
+        for r, h in zip(reference,hypothesis):
+            wer(r.split(), h.split())
